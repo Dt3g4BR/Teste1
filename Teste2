@@ -1,0 +1,62 @@
+-- this is an example for the script, use this to make your own! (Might be adding custom Themes)
+local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/7yhx/kwargs_Ui_Library/main/source.lua"))()
+
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+
+local UI = Lib:Create{
+   Theme = "Dark", -- or any other theme
+   Size = UDim2.new(0, 555, 0, 400) -- default
+}
+
+local Main = UI:Tab{
+   Name = "Teste1"
+}
+
+local Divider = Main:Divider{
+   Name = "Teste2"
+}
+
+local QuitDivider = Main:Divider{
+   Name = "Sair"
+}
+
+-- All functions have the Name, Description and Callback arguments so you can use them whenever ig yeah
+local KillAll = Divider:Button{
+   Name = "ESP",
+   Description = "ESP FOI ATIVADO!",
+   Callback = local espBox = Instance.new("BillboardGui")
+    espBox.Adornee = part
+    espBox.Size = UDim2.new(0, 100, 0, 20)
+    espBox.StudsOffset = Vector3.new(0, 2, 0)
+    espBox.Parent = part
+   end
+}
+
+local espText = Instance.new("TextLabel")
+    espText.BackgroundTransparency = 1
+    espText.Size = UDim2.new(1, 0, 1, 0)
+    espText.Text = part.Parent.Name
+    espText.Font = Enum.Font.SourceSansBold
+    espText.TextSize = 14
+    espText.TextColor3 = Color3.new(1, 0, 0) -- Vermelho
+    espText.Parent = espBox
+end
+
+-- Função para atualizar a posição da caixa de texto
+function updateESP()
+    for _, playerCharacter in pairs(game.Players:GetPlayers()) do
+        if playerCharacter ~= player then
+            local characterRoot = playerCharacter.Character and playerCharacter.Character:FindFirstChild("HumanoidRootPart")
+            if characterRoot then
+                local screenPosition, onScreen = camera:WorldToScreenPoint(characterRoot.Position)
+                if onScreen then
+                    createESP(characterRoot)
+                end
+            end
+        end
+    end
+end
+
+-- Atualiza a posição da caixa de texto a cada frame
+game:GetService("RunService").RenderStepped:Connect(updateESP)
