@@ -1,0 +1,39 @@
+-- Script de ESP para Krush PvP
+local player = game.Players.LocalPlayer
+local camera = game.Workspace.CurrentCamera
+
+-- Função para criar uma caixa de texto de ESP
+function createESP(part)
+    local espBox = Instance.new("BillboardGui")
+    espBox.Adornee = part
+    espBox.Size = UDim2.new(0, 100, 0, 20)
+    espBox.StudsOffset = Vector3.new(0, 2, 0)
+    espBox.Parent = part
+
+    local espText = Instance.new("TextLabel")
+    espText.BackgroundTransparency = 1
+    espText.Size = UDim2.new(1, 0, 1, 0)
+    espText.Text = part.Parent.Name
+    espText.Font = Enum.Font.SourceSansBold
+    espText.TextSize = 14
+    espText.TextColor3 = Color3.new(1, 0, 0) -- Vermelho
+    espText.Parent = espBox
+end
+
+-- Função para atualizar a posição da caixa de texto
+function updateESP()
+    for _, playerCharacter in pairs(game.Players:GetPlayers()) do
+        if playerCharacter ~= player then
+            local characterRoot = playerCharacter.Character and playerCharacter.Character:FindFirstChild("HumanoidRootPart")
+            if characterRoot then
+                local screenPosition, onScreen = camera:WorldToScreenPoint(characterRoot.Position)
+                if onScreen then
+                    createESP(characterRoot)
+                end
+            end
+        end
+    end
+end
+
+-- Atualiza a posição da caixa de texto a cada frame
+game:GetService("RunService").RenderStepped:Connect(updateESP)
